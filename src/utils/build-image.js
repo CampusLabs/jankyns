@@ -1,5 +1,6 @@
 const _ = require('underscore');
 const {maxConcurrentBuilds} = require('../config');
+const builds = require('./builds');
 const docker = require('./docker');
 const getProvider = require('./get-provider');
 const getTags = require('./get-tags');
@@ -82,7 +83,11 @@ const run = options =>
       options.image.status = 'failure';
       return publish(options);
     })
-    .then(() => queue.splice(queue.indexOf(options), 1))
+    .then(() => {
+      queue.splice(queue.indexOf(options), 1);
+      const {buildId} = options;
+      if (!_.any(queue, {buildId})) delete builds[buildId];
+    })
     .then(nextBuild)
     .catch(console.error.bind(console));
 

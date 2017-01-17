@@ -16,6 +16,15 @@ module.exports = {
     cert: maybeRead(env.DOCKER_CERT, env.DOCKER_CERT_PATH),
     key: maybeRead(env.DOCKER_KEY, env.DOCKER_KEY_PATH)
   },
+  fs: {
+    dir: env.FS_DIR
+  },
+  gcloud: {
+    bucket: env.GCLOUD_BUCKET,
+    clientEmail: env.GCLOUD_CLIENT_EMAIL,
+    privateKey: env.GCLOUD_PRIVATE_KEY && JSON.parse(env.GCLOUD_PRIVATE_KEY)
+  },
   maxConcurrentBuilds: parseInt(env.MAX_CONCURRENT_BUILDS) || os.cpus().length,
-  publicUrl: env.PUBLIC_URL
+  publicUrl: env.PUBLIC_URL,
+  store: env.STORE
 };
