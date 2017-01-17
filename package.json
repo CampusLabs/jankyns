@@ -1,0 +1,13 @@
+{
+  "private": true,
+  "main": "src",
+  "dependencies": {
+    "body-parser": "1.15.2",
+    "dockerode": "2.3.1",
+    "express": "4.14.0",
+    "node-fetch": "1.6.3",
+    "underscore": "1.8.3",
+    "octokat": "0.4.18",
+    "tar-stream": "1.5.2"
+  }
+}
