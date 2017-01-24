@@ -9,8 +9,10 @@ module.exports = options => {
   options = _.extend({}, env, options);
   const provider = getProvider(options.provider);
   options.buildId = crypto.randomBytes(32).toString('hex');
-  return provider.getSha(options)
-    .then(sha => options.sha = sha)
+  return Promise
+    .resolve(
+      options.sha || provider.getSha(options).then(sha => options.sha = sha)
+    )
     .then(() =>
       Promise.all(_.map(['.json', '.js'], ext =>
         provider.getFile(_.extend({}, options, {file: `jankyns${ext}`}))

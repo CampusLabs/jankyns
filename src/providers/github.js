@@ -7,15 +7,23 @@ const zlib = require('zlib');
 exports.getOptionsFromWebhook = ({
   req: {
     headers: {'x-github-event': event},
-    body: {deleted, ref, repository: {full_name: fullName = ''} = {}}
+    body: {
+      after: sha,
+      deleted,
+      ref,
+      ref_type: refType,
+      repository: {full_name: fullName = ''} = {}
+    }
   }
 }) =>
   Promise.resolve().then(() => {
     if (deleted || (event !== 'create' && event !== 'push')) return;
 
+    if (event === 'create' && refType !== 'tag') return;
+
     const [owner, repo] = fullName.split('/');
     ref = ref && ref.split('/')[2] || ref;
-    if (owner && repo && ref) return {owner, repo, ref};
+    if (owner && repo && ref) return {owner, repo, ref, sha};
   });
 
 const NO_OWNER_ERROR = _.extend(
