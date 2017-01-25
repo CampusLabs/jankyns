@@ -54,7 +54,8 @@ exports.getSha = ({owner, githubToken: token, ref, repo}) =>
   });
 
 exports.getFile = ({owner, githubToken: token, ref, repo, file}) =>
-  (new Octokat({token})).repos(owner, repo).contents(file).read({ref})
+  (new Octokat({token})).repos(owner, repo).contents(file).fetch({ref})
+    .then(({content}) => Buffer.from(content, 'base64').toString())
     .catch(er => { if (er.status !== 404) throw er; });
 
 exports.getTarStream = ({
