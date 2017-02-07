@@ -24,6 +24,6 @@ module.exports = options =>
     return fetch(slackUrl, {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({text})
+      body: JSON.stringify({parse: 'none', text})
     });
   });
