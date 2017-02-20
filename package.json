@@ -2,10 +2,10 @@
   "private": true,
   "main": "src",
   "dependencies": {
-    "@google-cloud/storage": "0.6.1",
-    "body-parser": "1.16.0",
+    "@google-cloud/storage": "0.7.0",
+    "body-parser": "1.16.1",
     "dockerode": "2.3.1",
-    "express": "4.14.0",
+    "express": "4.14.1",
     "node-fetch": "1.6.3",
     "underscore": "1.8.3",
     "octokat": "0.6.2",
