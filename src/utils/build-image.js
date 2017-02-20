@@ -91,8 +91,7 @@ const run = options =>
     .then(nextBuild)
     .catch(console.error.bind(console));
 
-const getBuilding = () =>
-  _.filter(queue, ({image: {status}}) => status === 'building');
+const getBuilding = () => _.filter(queue, {status: 'building'});
 
 const queue = [];
 module.exports = options => {
