@@ -10,19 +10,16 @@ exports.getOptionsFromWebhook = ({
     body: {
       after: sha,
       deleted,
-      ref,
-      ref_type: refType,
+      ref = '',
       repository: {full_name: fullName = ''} = {}
     }
   }
 }) =>
   Promise.resolve().then(() => {
-    if (deleted || (event !== 'create' && event !== 'push')) return;
-
-    if (event === 'create' && refType !== 'tag') return;
+    if (event !== 'push' || deleted) return;
 
     const [owner, repo] = fullName.split('/');
-    ref = ref && ref.split('/')[2] || ref;
+    ref = ref.split('/')[2];
     if (owner && repo && ref) return {owner, repo, ref, sha};
   });
 

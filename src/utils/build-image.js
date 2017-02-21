@@ -95,7 +95,6 @@ const atCapacity = () =>
     n + _.filter(images, {status: 'building'}).length
   , 0) >= maxConcurrentBuilds;
 
-let building = 0;
 const queue = [];
 module.exports = options => {
   queue.push(options);
