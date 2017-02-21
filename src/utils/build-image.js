@@ -60,8 +60,10 @@ const push = options =>
   ));
 
 const nextBuild = () => {
-  const {0: options} = getByStatus('waiting');
-  if (!options || atCapacity()) return;
+  if (atCapacity()) return;
+
+  const options = queue.shift();
+  if (!options) return;
 
   options.image.status = 'building';
   return publish(options).then(() => run(options));
@@ -82,18 +84,18 @@ const run = options =>
       return publish(options);
     })
     .then(() => {
-      queue.splice(queue.indexOf(options), 1);
       const {buildId} = options;
       if (!_.any(queue, {buildId})) delete builds[buildId];
     })
     .then(nextBuild)
     .catch(console.error.bind(console));
 
-const getByStatus = _status =>
-  _.filter(queue, ({image: {status}}) => status === _status);
+const atCapacity = () =>
+  _.reduce(builds, (n, {images}) =>
+    n + _.filter(images, {status: 'building'}).length
+  , 0) >= maxConcurrentBuilds;
 
-const atCapacity = () => getByStatus('building').length >= maxConcurrentBuilds;
-
+let building = 0;
 const queue = [];
 module.exports = options => {
   queue.push(options);
