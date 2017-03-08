@@ -11,6 +11,6 @@ module.exports = options =>
     const extras = _.map(tags.slice(1), tag => tag.split(':')[1]);
     const suffix = extras.length ? ` (${extras.join(', ')})` : '';
     if (isFailure) console.error(error);
-    console[method](`${options.image.status}: ${tags[0]}${suffix}`);
+    console[method](`${status}: ${tags[0]}${suffix}`);
     console[method](getBuildUrl(buildId));
   });

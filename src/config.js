@@ -6,6 +6,12 @@ const {env} = process;
 const maybeRead = (key, keyPath) => key || keyPath && fs.readFileSync(keyPath);
 
 module.exports = {
+  aws: {
+    ses: {
+      from: env.AWS_SES_FROM,
+      to: env.AWS_SES_TO
+    }
+  },
   envs: JSON.parse(env.ENVS || '{}'),
   docker: {
     host: env.DOCKER_HOST,
