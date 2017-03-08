@@ -11,7 +11,7 @@ transport.use('compile', markdown());
 
 const {from, to} = config.aws.ses;
 
-export default options =>
+module.exports = options =>
   Promise.resolve().then(() => {
     if (!from || !to) return;
 
