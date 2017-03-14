@@ -83,10 +83,7 @@ const run = options =>
       options.image.status = 'failure';
       return publish(options);
     })
-    .then(() => {
-      const {buildId} = options;
-      if (!_.any(queue, {buildId})) delete builds[buildId];
-    })
+    .then(() => options.deferred.resolve())
     .then(nextBuild)
     .catch(console.error.bind(console));
 
@@ -95,11 +92,24 @@ const atCapacity = () =>
     n + _.filter(images, {status: 'building'}).length
   , 0) >= maxConcurrentBuilds;
 
-const queue = [];
-module.exports = options => {
-  queue.push(options);
-
-  if (atCapacity()) return publish(options);
-
-  return nextBuild();
+const defer = () => {
+  const deferred = {};
+  deferred.promise = new Promise((resolve, reject) => {
+    deferred.resolve = resolve;
+    deferred.reject = reject;
+  });
+  return deferred;
 };
+
+const queue = [];
+module.exports = options =>
+  Promise.resolve().then(() => {
+    const deferred = defer();
+    options = _.extend({}, options, {deferred});
+    queue.push(options);
+
+    if (atCapacity()) publish(options);
+    else nextBuild();
+
+    return deferred.promise;
+  });

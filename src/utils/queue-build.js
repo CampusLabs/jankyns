@@ -6,7 +6,8 @@ module.exports = options =>
   prepareBuild(options).then(options => {
     if (options.images.length) {
       builds[options.buildId] = options;
-      buildImages(options);
+      const removeBuild = () => { delete builds[options.buildId]; };
+      buildImages(options).then(removeBuild).catch(removeBuild);
     }
 
     return options;
