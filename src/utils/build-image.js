@@ -66,7 +66,8 @@ const nextBuild = () => {
   if (!options) return;
 
   options.image.status = 'building';
-  return publish(options).then(() => run(options));
+  publish(options).then(() => run(options));
+  nextBuild();
 };
 
 const run = options =>
