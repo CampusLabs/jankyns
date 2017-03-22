@@ -8,5 +8,5 @@ module.exports = options =>
   saveBuild(options).catch(logError).then(() =>
     Promise.all(_.map(publishers, publisher =>
       publisher(options).catch(logError)
-    )
+    ))
   );
